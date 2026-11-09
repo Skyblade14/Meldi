@@ -168,7 +168,7 @@ einschließlich Edge Cases. Details: [docs/teststrategy.md](docs/teststrategy.md
 
 ---
 
-## Phase 7 – Repository veröffentlichen 🔶
+## Phase 7 – Repository veröffentlichen ✅
 
 Ziel: Das GitHub-Repository öffentlich schalten, ohne Geheimnisse oder personenbezogene Daten preiszugeben und mit
 klaren Nutzungsrechten. Unabhängig von den anderen Phasen.
@@ -186,10 +186,12 @@ klaren Nutzungsrechten. Unabhängig von den anderen Phasen.
 - ✅ Leak-Schutz am 09.11.2026: pre-commit mit gitleaks und `tools/leak_check.py`, dieselben Prüfungen in GitHub Actions
 - ✅ Autor-E-Mail am 08.11.2026: Historie zu einem Commit zusammengefasst, Autor ist die GitHub-Noreply-Adresse. Künftige
   Commits nutzen sie über die Git-Konfiguration dieses Repositorys (auf einem neuen Rechner erneut setzen)
-- ⬜ Unmittelbar vor dem Umschalten: gitleaks über die gesamte Historie laufen lassen, damit auch neue Commits geprüft
-  sind (aktuelle Version wie in GitHub Actions, die Linux-Pakete sind oft veraltet). Issues, Actions-Logs und Wiki auf
-  GitHub durchsehen
-- ⬜ Sichtbarkeit in den GitHub-Einstellungen umstellen, danach Secret Scanning und Push Protection einschalten
+- ✅ Vor dem Umschalten am 09.11.2026: gitleaks 8.30.1 über die gesamte Historie ohne Befund. Das GitHub-Repository wurde
+  neu angelegt, weil ein alter Commit mit privater E-Mail-Adresse über seinen Hash erreichbar blieb. Es startete mit
+  einem einzigen Commit, ohne Issues, Actions-Logs und Wiki
+- ✅ Sichtbarkeit am 09.11.2026 auf öffentlich umgestellt, Secret Scanning und Push Protection eingeschaltet
+- ✅ Dependabot am 09.11.2026: Warnungen und Sicherheitsupdates aktiv, Routine-Updates gebündelt und monatlich
+  (`.github/dependabot.yml`), Merge nur von Hand
 
 **Zu beachten:** Der öffentliche Code zeigt, dass es seit Phase 5 keine Zugangsprüfung gibt. Testserver daher nur im
 VPN oder ELW-WLAN betreiben (siehe Bedingung in Phase 5). Die PyAV-Pakete für Linux enthalten GPL-Bibliotheken (x264,

@@ -1,0 +1,44 @@
+# Routine-Updates gebündelt und monatlich, Merge nur von Hand: Der Code läuft neben sensiblen Einsatzdaten.
+# Die Wartezeit hält frisch veröffentlichte, womöglich kompromittierte Versionen fern. Sicherheitsupdates gilt sie nicht.
+version: 2
+
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 7
+    groups:
+      actions:
+        patterns: ["*"]
+
+  - package-ecosystem: npm
+    directory: /frontend
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 7
+    groups:
+      frontend:
+        patterns: ["*"]
+
+  - package-ecosystem: uv
+    directory: /backend
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 7
+    groups:
+      # Muss vor „backend“ stehen, es zählt die erste passende Gruppe. CI lädt nie Whisper, deshalb vor dem Merge
+      # lokal `python tools/regression.py whisper` ausführen.
+      spracherkennung:
+        patterns:
+          - faster-whisper
+          - av
+          - ctranslate2
+          - onnxruntime
+          - tokenizers
+          - huggingface-hub
+      backend:
+        patterns: ["*"]

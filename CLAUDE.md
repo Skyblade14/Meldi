@@ -98,6 +98,9 @@ Abhängigkeitsrichtung: `api → services → models`, `api → stt`. `stt` darf
   Namen oder Adressen gehören in die gitignorierte `.leak-begriffe.local`, nie in eine versionierte Datei. In Tests
   Adressen zur Laufzeit zusammensetzen oder private Bereiche verwenden. Treffer nur mit Datei und Zeile melden, denn
   die Actions-Logs sind öffentlich.
+- **Dependabot** (`.github/dependabot.yml`) bündelt Updates monatlich, Merge nur von Hand. Vor dem Merge der Gruppe
+  `spracherkennung` lokal `python tools/regression.py whisper` ausführen, weil CI nie Whisper lädt. Die gitleaks-Version in
+  `tests.yml` (URL und Prüfsumme) pflegt Dependabot nicht.
 - **GitHub Actions** (`.github/workflows/tests.yml`) fährt `voll` auf Ubuntu und Windows, nie Whisper. Das Repository wird
   öffentlich: keine echten Aufnahmen oder Einsatzdaten in Tests, Actions auf Commits pinnen, keine Secrets im Workflow.
 - **Audio-Dekodierung:** `faster_whisper.decode_audio` ist mit PyAV ≥ 15 kaputt (`metadata_errors`). Deshalb
