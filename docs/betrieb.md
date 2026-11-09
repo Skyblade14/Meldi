@@ -10,29 +10,49 @@ Architektur: [architecture.md](architecture.md)
 
 ## Installation unter Windows
 
-**Voraussetzungen:**
-- [uv](https://docs.astral.sh/uv/) (Python-Werkzeug, installiert Python 3.12 selbst)
-- Node.js ≥ 20 (nur zum Bauen des Frontends)
-- [Caddy](https://caddyserver.com/download) (`caddy.exe`)
+**Voraussetzungen:** Windows 10 oder 11 (64 Bit) und Internet während der Installation. Python, uv, Caddy und Node.js
+müssen nicht vorhanden sein.
 
-**Schritte:**
+1. Unter [Releases](https://github.com/Skyblade14/Meldi/releases) `meldi-<Version>-windows-x64.zip` laden und entpacken.
+   Prüfsumme vergleichen: `Get-FileHash <Datei>` gegen `SHA256SUMS`.
+2. `installieren.cmd` doppelklicken. Windows kann davor warnen, weil das Paket nicht signiert ist. Der Installer
+   - legt `C:\Meldi` an (anderer Ort: `installieren.cmd -Ziel D:\Meldi`),
+   - lädt Python 3.12 und die Bibliotheken, geprüft gegen die Hashes aus `uv.lock`,
+   - lädt das Sprachmodell (`large-v3-turbo`, ~1,6 GB),
+   - legt die Verknüpfung „Meldi“ auf dem Desktop an,
+   - fragt nach der Firewall-Regel: eingehend TCP 443 und 80, **nur für das private Netz**.
+3. Wird der Rechner unter einer anderen Adresse erreicht als seiner ersten IP, die Umgebungsvariable `MELDI_HOST` setzen.
+4. NAS einrichten (siehe [NAS](#nas)).
 
-1. Das Repository z.B. nach `C:\Meldi` kopieren.
-2. Frontend bauen:
-   ```powershell
-   cd C:\Meldi\frontend; npm ci; npm run build
-   ```
-3. Backend einrichten. Dafür ist **einmalig Internet nötig**:
-   ```powershell
-   cd C:\Meldi\backend
-   uv sync
-   uv run meldi download-model            # large-v3-turbo, ~1,6 GB
-   ```
-4. `caddy.exe` nach `deploy\bin\` legen.
-5. Eine Verknüpfung auf `backend\.venv\Scripts\meldi-start.exe` auf den Desktop legen. Wird der Rechner unter einer
-   anderen Adresse erreicht als seiner ersten IP, die Umgebungsvariable `MELDI_HOST` setzen.
-6. In der Windows-Firewall eingehend TCP 443 und 80 erlauben, **nur für das private Netz**.
-7. NAS einrichten (siehe [NAS](#nas)).
+**Ablage auf dem Rechner:**
+
+| Ordner | Inhalt |
+|---|---|
+| `C:\Meldi\versionen\<Version>\` | App mit eigenem `.venv`. Die letzten drei Versionen bleiben erhalten |
+| `C:\Meldi\aktiv` | Verweis auf die laufende Version |
+| `C:\Meldi\data\` | Datenbanken, Modelle, Logs, Sicherungen. `data\` meint unten immer diesen Ordner |
+| `C:\Meldi\python\`, `C:\Meldi\uv-cache\` | Python und Paket-Zwischenspeicher, lassen sich neu herunterladen |
+
+**Modell ohne Internet:** Den Ordner `data\models\` eines anderen Rechners vor der Installation nach `C:\Meldi\data\models\`
+kopieren. Der Installer lädt dann nichts nach.
+
+### Update
+
+Startfenster schließen, das neue ZIP entpacken und dessen `installieren.cmd` starten. Das braucht wieder Internet, im
+Einsatz wird keines gebraucht. Erst wenn die neue Version vollständig installiert ist, sichert der Installer die
+Datenbanken nach `data\sicherung\<alte Version>\` und stellt um. Bricht der Download ab, bleibt die alte Version aktiv.
+Datenbank-Migrationen laufen beim ersten Öffnen eines Einsatzes.
+
+### Zurück zur vorigen Version
+
+`C:\Meldi\versionen\<Version>\installieren.cmd -Zurueck` braucht kein Internet. Hat das Update das Datenbankschema
+geändert, gehen die Datenbanken auf den Stand vor dem Update zurück, denn alte Software versteht neuere nicht. Der neuere
+Stand bleibt unter `data\sicherung\vor-rueckweg-<Zeit>\` liegen.
+
+### Aus dem Quellcode (Entwicklung)
+
+Braucht uv und Node.js: `npm ci; npm run build` in `frontend\`, `uv sync` und `uv run meldi download-model` in `backend\`,
+`caddy.exe` nach `deploy\bin\`. Gestartet wird über `backend\.venv\Scripts\meldi-start.exe`.
 
 ## Einsatz starten
 
@@ -129,8 +149,10 @@ Für Privathandys im Dauerbetrieb ist das unpraktisch.
 - **NAS verschlüsseln.** BitLocker schützt sie nicht, und die Einsatzablage enthält Sprachaufnahmen und Fotos (ggf.
   mit GPS).
 - Eigenes WLAN-Passwort, regelmäßig gewechselt. Kein Gastzugang.
-- **Aufbewahrungs- und Löschfristen** für `data\einsaetze\` und die Einsatzablage mit der/dem Datenschutzbeauftragten festlegen.
-  Bis es eine Exportfunktion gibt, wird die Datei manuell gesichert bzw. gelöscht.
+- **Aufbewahrungs- und Löschfristen** für `data\einsaetze\`, `data\sicherung\` und die Einsatzablage mit der/dem
+  Datenschutzbeauftragten festlegen. Bis es eine Exportfunktion gibt, wird die Datei manuell gesichert bzw. gelöscht.
+- `data\sicherung\` enthält nach jedem Update Kopien aller Einsatz-Datenbanken. Wer einen Einsatz löscht, muss ihn auch dort
+  löschen.
 - `MELDI_STT_KEEP_AUDIO` im Einsatz **niemals** aktivieren. Testaufnahmen in `data\audio\` nach der
   Auswertung löschen.
 

@@ -11,7 +11,10 @@ PROJECT_DIR = BACKEND_DIR.parent
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_prefix="MELDI_", env_file=BACKEND_DIR / ".env", extra="ignore")
+    # UTF-8 ausdrücklich: Der Installer schreibt hier Pfade, und unter Windows wäre sonst die ANSI-Codepage maßgeblich.
+    model_config = SettingsConfigDict(
+        env_prefix="MELDI_", env_file=BACKEND_DIR / ".env", env_file_encoding="utf-8", extra="ignore"
+    )
 
     data_dir: Path = PROJECT_DIR / "data"
     database_url: str = ""  # leer = SQLite in data_dir
@@ -73,6 +76,14 @@ class Settings(BaseSettings):
     @property
     def audio_dir(self) -> Path:
         return self.data_dir / "audio"
+
+
+def installierte_version(projekt_dir: Path = PROJECT_DIR) -> str | None:
+    """Die Datei VERSION legt der Paketbau an, in einem Entwicklungsstand gibt es sie nicht."""
+    try:
+        return (projekt_dir / "VERSION").read_text(encoding="utf-8").strip() or None
+    except OSError:
+        return None
 
 
 @lru_cache

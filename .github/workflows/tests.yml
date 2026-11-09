@@ -4,8 +4,10 @@ name: Tests
 
 on:
   push:
+    branches: ["**"] # Tags testet release.yml über workflow_call, sonst liefe alles doppelt
   pull_request:
   workflow_dispatch:
+  workflow_call:
 
 # Pull Requests von außen führen fremden Code aus: nur Leserechte und keine Secrets.
 permissions:

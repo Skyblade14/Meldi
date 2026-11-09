@@ -6,6 +6,9 @@ __pycache__/
 
 # Frontend
 node_modules/
+
+# Gebaute Installationspakete
+/paket/
 frontend/dist/
 
 # Laufzeitdaten (enthalten sensible Einsatzdaten!)

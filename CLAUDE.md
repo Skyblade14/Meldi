@@ -37,6 +37,10 @@ python tools/regression.py whisper                     # zusätzlich echtes Mode
 pre-commit install                                     # einmalig pro Klon
 pre-commit run --all-files                             # alle Prüfungen von Hand
 
+# Release (Ablauf über den Skill /release)
+python tools/paket.py bauen                            # Windows-Paket nach paket/, braucht ein aktuelles frontend/dist
+python tools/paket.py rauchtest paket/<zip>            # Installieren, Update, Rückweg (nur Windows, sonst in release.yml)
+
 # Backend (aus backend/)
 uv sync --all-groups                                   # Abhängigkeiten inkl. dev + bench
 uv run pytest                                          # schnelle Tests (FakeSTT, ~5 s)
@@ -101,6 +105,11 @@ Abhängigkeitsrichtung: `api → services → models`, `api → stt`. `stt` darf
 - **Dependabot** (`.github/dependabot.yml`) bündelt Updates monatlich, Merge nur von Hand. Vor dem Merge der Gruppe
   `spracherkennung` lokal `python tools/regression.py whisper` ausführen, weil CI nie Whisper lädt. Die gitleaks-Version in
   `tests.yml` (URL und Prüfsumme) pflegt Dependabot nicht.
+- **Release-Paket:** `tools/paket.py` nimmt nur Dateien aus der Positivliste `VERSIONIERT` auf. Braucht die App zur Laufzeit
+  eine neue Datei außerhalb von `backend/app/`, muss sie dort eingetragen werden. Die Versionen von Caddy, uv und Python
+  (`WERKZEUGE`, `PYTHON_VERSION`) pflegt Dependabot nicht. Meldi prüft nie selbst auf Updates (keine externen Requests).
+- **Installer:** `deploy/installieren.ps1` und `.cmd` nur in ASCII halten, PowerShell 5.1 liest Dateien ohne BOM als ANSI.
+  Unter Linux lässt er sich nicht ausführen, geprüft wird er vom Rauchtest in `release.yml`.
 - **GitHub Actions** (`.github/workflows/tests.yml`) fährt `voll` auf Ubuntu und Windows, nie Whisper. Das Repository wird
   öffentlich: keine echten Aufnahmen oder Einsatzdaten in Tests, Actions auf Commits pinnen, keine Secrets im Workflow.
 - **Audio-Dekodierung:** `faster_whisper.decode_audio` ist mit PyAV ≥ 15 kaputt (`metadata_errors`). Deshalb

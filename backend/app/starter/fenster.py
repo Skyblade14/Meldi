@@ -15,7 +15,7 @@ from tkinter import filedialog, messagebox, ttk
 
 import customtkinter as ctk
 
-from app.config import Settings
+from app.config import Settings, installierte_version
 from app.starter import farben, prozesse
 from app.starter import ordner as ordner_modul
 from app.starter.ordner import Analyse, EinsatzInfo, Startauftrag
@@ -49,7 +49,7 @@ class Fenster:
         self._titel_schrift = ctk.CTkFont(size=22, weight="bold")
         self._feld_schrift = ctk.CTkFont(weight="bold")
 
-        root.title("Meldi")
+        root.title(f"Meldi {installierte_version() or '(Entwicklungsstand)'}")
         root.minsize(680, 460)
         root.protocol("WM_DELETE_WINDOW", self.schliessen)
         root.report_callback_exception = self._unerwartet

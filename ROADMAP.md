@@ -97,15 +97,14 @@ Ziel: Meldi läuft auf dem echten ELW-Rechner mit NAS, Netz und Handys und ist e
 
 - **Rechner auswählen und prüfen:** Welcher Rechner genau? Mindestens 8 CPU-Threads für `large-v3-turbo` (sonst
   Modellwahl neu bewerten), genug Speicherplatz, Standby im Einsatz ausgeschlossen
-- **Installationsskript bzw. Paket für Windows:** Für das Paket prüfen, ob die PyAV-Pakete GPL-Bibliotheken (x264, x265)
-  mitbringen. Unter Linux ist das so, die Windows-Pakete sind noch nicht geprüft
-- **Update-Ablauf festlegen und einmal durchspielen:** Datenbanken sichern, neue Version einspielen, Migrationen beim
-  Start prüfen, Rückweg zur alten Version
-- **Meldi installieren:** Frontend bauen, `uv sync`, Modell laden (einmalig Internet nötig), `caddy.exe` nach
-  `deploy\bin\`, Verknüpfung auf `meldi-start` auf dem Desktop
-- **Datenordner festlegen:** Die Datenbanken liegen unter `MELDI_DATA_DIR` (Default `<repo>\data`, hängt also vom
-  Installationsort ab). Das Startfenster fragt ihn nicht ab und zeigt ihn nicht an. Lokales, von BitLocker erfasstes
-  Laufwerk wählen, nie die NAS. Entscheiden, ob das Startfenster den Pfad anzeigen oder wählbar machen soll
+- **Update einmal auf dem echten Rechner durchspielen:** Update und Rückweg mit echten Einsatz-Datenbanken, Migrationen
+  beim Öffnen eines Einsatzes prüfen
+- **Meldi installieren:** Release-Paket laden und `installieren.cmd` ausführen (Internet nötig)
+- **Datenordner prüfen:** Der Installer legt die Datenbanken nach `<Zielordner>\data`. Zielordner auf einem lokalen, von
+  BitLocker erfassten Laufwerk wählen, nie die NAS. Das Startfenster zeigt den Pfad nicht an. Entscheiden, ob es das
+  soll
+- **Eigene Caddy-Einstellungen:** `deploy\Caddyfile` und `caddy.exe` liegen im Versionsordner. Eine Umstellung auf Let's
+  Encrypt ginge beim nächsten Update verloren. Mit der Festlegung zu Netz und HTTPS lösen
 - **Rechner absichern:** BitLocker, Windows-Firewall eingehend TCP 443 und 80 nur für das private Netz
 - **NAS einrichten:** Freigabe mit Schreiben und Löschen nur für das Konto des ELW-Rechners, Snapshots oder Papierkorb,
   Verschlüsselung, Laufwerk unter demselben Konto wie `meldi-start` verbinden
