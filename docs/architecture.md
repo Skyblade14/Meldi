@@ -486,5 +486,5 @@ zusätzlich zur Datenbank als Ordner abgelegt (`services/ablage.py`):
 | Ähnlich klingende Empfänger (Einsatzleitwagen ↔ Einsatzleiter) | Falscher Empfänger übernommen | Melder sieht Ergebnis vor dem Senden; Sprachregelung „ELW“; ggf. höhere Schwelle |
 | HTTPS mit Privathandys | Ohne vertrautes Zertifikat kein Mikrofon | Let's-Encrypt-Variante umsetzen |
 | Caddy-Konfiguration und Windows-Skripte noch nicht auf Zielsystem getestet | Inbetriebnahme hakt | Test auf ELW-Rechner (Roadmap) |
-| Keine Passwörter | Jedes Gerät im Netz kann alles lesen; Namen sind nicht geprüft | Vor dem ersten Einsatz mit echten Daten klären (Roadmap Phase 5) |
+| Keine Passwörter | Jedes Gerät im Netz kann alles lesen; Namen sind nicht geprüft | Vor dem ersten Einsatz mit echten Daten klären (siehe Roadmap) |
 | Gelöschter Einsatzordner | Audio und Fotos verloren, Texte neu schreibbar | NAS-Rechte, Snapshots, Warnung im Startfenster, Neuaufbau |

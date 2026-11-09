@@ -14,7 +14,7 @@ class Rolle(enum.StrEnum):
 
 
 class User(Base):
-    """Eine Person, nur über den selbst angegebenen Namen bekannt (keine Passwörter, siehe Roadmap Phase 5)."""
+    """Eine Person, nur über den selbst angegebenen Namen bekannt (keine Passwörter, siehe Roadmap)."""
 
     __tablename__ = "user"
 

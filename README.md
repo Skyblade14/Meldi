@@ -18,7 +18,7 @@ Rechner im Einsatzleitwagen (ELW); Nachrichten werden auf dem Smartphone **per S
 | [docs/architecture.md](docs/architecture.md) | Architektur: Bausteine, Abläufe, API, Datenmodell, Spracherkennung, Sicherheit, Entscheidungen |
 | [docs/betrieb.md](docs/betrieb.md) | Installation unter Windows, Netzwerk, HTTPS-Zertifikat, Datenschutz im Betrieb |
 | [docs/spracherkennung-messung.md](docs/spracherkennung-messung.md) | Messergebnisse und Modellempfehlung |
-| [ROADMAP.md](ROADMAP.md) | Stand und nächste Phasen |
+| [ROADMAP.md](ROADMAP.md) | Offene Themen |
 | [CLAUDE.md](CLAUDE.md) | Hinweise für die Entwicklung mit Claude Code (Regeln, Befehle, Konventionen) |
 
 ## Schnellstart (Entwicklung)
