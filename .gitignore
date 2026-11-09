@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# Frontend
+node_modules/
+frontend/dist/
+
+# Laufzeitdaten (enthalten sensible Einsatzdaten!)
+data/
+*.db
+*.db-wal
+*.db-shm
+.env
+
+# Benchmark-Artefakte
+tools/stt_bench/audio/
+tools/stt_bench/results/
+tools/stt_bench/voices/
+
+# Testläufe (Traces und Screenshots)
+test-results/
+coverage/
+.coverage
+
+# Deploy-Binaries
+deploy/bin/
+
+# Schlüssel und Zertifikate
+*.pem
+*.key
+*.crt
+
+# Aufnahmen, Fotos und Datenbanken auch außerhalb von data/
+*.wav
+*.webm
+*.ogg
+*.opus
+*.mp3
+*.m4a
+*.mp4
+*.flac
+*.jpg
+*.jpeg
+*.heic
+*.sqlite
+*.sqlite3
+
+# Claude Code: nur gemeinsame Skills und Agenten versionieren
+.claude/*
+!.claude/skills/
+!.claude/agents/
+
+# Persönliches
+meineNotes*.md
+.leak-begriffe.local

@@ -1,0 +1,14 @@
+# Einmalig pro Klon: `pre-commit install`. gitleaks muss im PATH liegen.
+# Nur lokale Hooks: gitleaks aus dem Quellcode zu bauen bräuchte Go, und so gibt es keine fremden Repositorys zu pinnen.
+repos:
+  - repo: local
+    hooks:
+      - id: gitleaks
+        name: gitleaks (Schlüssel und Passwörter)
+        entry: gitleaks protect --staged --redact --no-banner
+        language: system
+        pass_filenames: false
+      - id: leak-check
+        name: leak_check (Binärdateien, Zertifikate, Adressen)
+        entry: python tools/leak_check.py
+        language: python

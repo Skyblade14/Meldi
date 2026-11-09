@@ -1,0 +1,97 @@
+# Testsätze für die Spracherkennung.
+# field:   Formularfeld (an | inhalt) – bestimmt den Prompt wie in der App
+# text:    Referenztext (so wie er eingesprochen wird)
+# expect:  nur bei field=an – welche Funktion zugeordnet werden soll
+# terms:   Fachbegriffe, die exakt erkannt werden müssen (Trefferquote)
+
+- {id: an01, field: an, text: "Einsatzleitung", expect: Einsatzleitung}
+- {id: an02, field: an, text: "An die Einsatzleitung", expect: Einsatzleitung}
+- {id: an03, field: an, text: "Einsatzabschnitt Brand", expect: EA Brand}
+- {id: an04, field: an, text: "Abschnitt Wasserversorgung", expect: EA Wasserversorgung}
+- {id: an05, field: an, text: "An den Einsatzabschnitt Atemschutz", expect: EA Atemschutz}
+- {id: an06, field: an, text: "Atemschutzüberwachung", expect: Atemschutzüberwachung}
+- {id: an07, field: an, text: "Bereitstellungsraum", expect: Bereitstellungsraum}
+- {id: an08, field: an, text: "Einsatzleitwagen", expect: ELW}
+- {id: an09, field: an, text: "Rettungsdienst", expect: Rettungsdienst}
+- {id: an10, field: an, text: "Technische Hilfe", expect: EA Technische Hilfe}
+
+- id: in01
+  field: inhalt
+  text: "Zwei Trupps unter Atemschutz im Innenangriff, ein C-Rohr vorgenommen."
+  terms: [Atemschutz, Innenangriff, C-Rohr]
+- id: in02
+  field: inhalt
+  text: "Feuer unter Kontrolle, Nachlöscharbeiten laufen."
+  terms: [Kontrolle, Nachlöscharbeiten]
+- id: in03
+  field: inhalt
+  text: "Benötigen einen weiteren RTW, eine Person mit Rauchgasvergiftung."
+  terms: [RTW, Rauchgasvergiftung]
+- id: in04
+  field: inhalt
+  text: "Wasserversorgung über Hydrant in der Hauptstraße hergestellt."
+  terms: [Wasserversorgung, Hydrant, Hauptstraße]
+- id: in05
+  field: inhalt
+  text: "Drehleiter in Stellung, Menschenrettung über den Balkon im zweiten Obergeschoss."
+  terms: [Drehleiter, Menschenrettung, Obergeschoss]
+- id: in06
+  field: inhalt
+  text: "Sicherheitstrupp steht bereit, Atemschutzüberwachung läuft."
+  terms: [Sicherheitstrupp, Atemschutzüberwachung]
+- id: in07
+  field: inhalt
+  text: "Bitte Wärmebildkamera und Lüfter zum Eingang Nord bringen."
+  terms: [Wärmebildkamera, Lüfter]
+- id: in08
+  field: inhalt
+  text: "Eine Person vermisst, letzter bekannter Aufenthaltsort Dachgeschoss."
+  terms: [vermisst, Dachgeschoss]
+- id: in09
+  field: inhalt
+  text: "Angriffstrupp meldet Atemschutzgeräte nur noch fünfzig bar Restdruck, Rückzug eingeleitet."
+  terms: [Angriffstrupp, Restdruck, Rückzug]
+- id: in10
+  field: inhalt
+  text: "Nachalarmierung eines weiteren HLF und einer DLK erforderlich."
+  terms: [Nachalarmierung, HLF, DLK]
+- id: in11
+  field: inhalt
+  text: "Gasgeruch im Keller, Strom und Gas wurden abgestellt."
+  terms: [Gasgeruch, Keller]
+- id: in12
+  field: inhalt
+  text: "Verkehrsunfall mit eingeklemmter Person, Rettungsschere wird eingesetzt, NEF ist vor Ort."
+  terms: [eingeklemmter, Rettungsschere, NEF]
+- id: in13
+  field: inhalt
+  text: "Polizei sperrt die Bundesstraße in beide Richtungen."
+  terms: [Polizei, Bundesstraße]
+- id: in14
+  field: inhalt
+  text: "Brandausbreitung auf das Nachbargebäude verhindert, Riegelstellung mit B-Rohr aufgebaut."
+  terms: [Brandausbreitung, Riegelstellung, B-Rohr]
+- id: in15
+  field: inhalt
+  text: "Drei Personen leicht verletzt, werden vom Rettungsdienst betreut."
+  terms: [verletzt, Rettungsdienst]
+- id: in16
+  field: inhalt
+  text: "Bereitstellungsraum am Sportplatz eingerichtet, zwei LF stehen dort bereit."
+  terms: [Bereitstellungsraum, Sportplatz, LF]
+- id: in17
+  field: inhalt
+  text: "Dach ist einsturzgefährdet, alle Kräfte aus dem Gebäude zurückgezogen."
+  terms: [einsturzgefährdet, zurückgezogen]
+- id: in18
+  field: inhalt
+  text: "Ölspur auf zweihundert Meter, Bindemittel wird ausgebracht."
+  terms: [Ölspur, Bindemittel]
+- id: in19
+  field: inhalt
+  text: "Tiere im Stall, Landwirt ist informiert, Evakuierung der Kühe läuft."
+  terms: [Stall, Landwirt, Evakuierung]
+- id: in20
+  field: inhalt
+  text: "Feuer aus. Einsatzstelle wird an den Eigentümer übergeben."
+  terms: [Feuer aus, Einsatzstelle, Eigentümer]

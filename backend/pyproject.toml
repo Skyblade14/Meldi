@@ -1,0 +1,58 @@
+[project]
+name = "meldi"
+version = "0.1.0"
+description = "Melder-Software für den Einsatzleitwagen – lokal gehostet"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "sqlalchemy>=2.0.36",
+    "alembic>=1.14",
+    "pydantic-settings>=2.6",
+    "python-multipart>=0.0.18",
+    "faster-whisper>=1.1",
+    "av>=15",
+    "rapidfuzz>=3.10",
+    "pillow>=13.0.0",
+    "customtkinter>=5.2",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "httpx>=0.28",
+    "pytest-cov>=7.1.0",
+    "pytest-timeout>=2.4.0",
+]
+bench = [
+    "jiwer>=3.0",
+    "pyyaml>=6.0",
+    "piper-tts>=1.2",
+    "numpy>=1.26",
+]
+ui = [
+    "playwright>=1.64.1",
+    "pytest-playwright>=0.10.0",
+]
+
+[project.scripts]
+meldi = "app.cli:main"
+
+[project.gui-scripts]
+meldi-start = "app.starter:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "slow: lädt ein echtes Whisper-Modell (MELDI_TEST_WHISPER=1)",
+    "ui: Bedienung im echten Browser (uv run --group ui pytest -m ui)",
+]
+# Die UI-Tests brauchen Browser und ein gebautes Frontend. Ein -m auf der Kommandozeile überschreibt das.
+addopts = '-m "not ui"'

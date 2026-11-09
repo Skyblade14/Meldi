@@ -1,0 +1,97 @@
+name: Tests
+
+# Stufe „voll“ auf Linux und der Zielplattform Windows. Nur FakeSTT und synthetische Daten, kein Whisper-Modell.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+# Pull Requests von außen führen fremden Code aus: nur Leserechte und keine Secrets.
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Sicherung: Lädt ein Test doch ein Modell, schlägt er fehl, statt es still herunterzuladen.
+  HF_HUB_OFFLINE: "1"
+  PYTHONUTF8: "1"
+
+jobs:
+  leaks:
+    name: Leak-Prüfung
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0 # gitleaks prüft die gesamte Historie
+          persist-credentials: false
+
+      - name: gitleaks installieren
+        run: |
+          curl -sSfL -o "$RUNNER_TEMP/gitleaks.tar.gz" https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz
+          echo "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb  $RUNNER_TEMP/gitleaks.tar.gz" | sha256sum -c -
+          tar xzf "$RUNNER_TEMP/gitleaks.tar.gz" -C "$RUNNER_TEMP" gitleaks
+
+      - name: gitleaks
+        run: '"$RUNNER_TEMP/gitleaks" git --redact --no-banner .'
+
+      - name: Dateien und Adressen
+        run: python3 tools/leak_check.py
+
+  regression:
+    name: Regression (${{ matrix.os }})
+    # Branches dieses Repositorys laufen schon über push, sonst liefe alles doppelt.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    steps:
+      # Actions auf feste Commits gepinnt: Tags lassen sich nachträglich verschieben.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with:
+          python-version: "3.12"
+          enable-cache: true
+          cache-dependency-glob: backend/uv.lock
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Backend-Abhängigkeiten
+        working-directory: backend
+        run: uv sync --locked --group ui
+
+      - name: Frontend-Abhängigkeiten
+        working-directory: frontend
+        run: npm ci
+
+      - name: Browser installieren
+        working-directory: backend
+        run: uv run --group ui playwright install --with-deps chromium webkit
+
+      - name: Regressionstests
+        run: uv run --no-project python tools/regression.py voll
+
+      - name: Traces und Screenshots sichern
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: test-results-${{ matrix.os }}
+          path: backend/test-results
+          if-no-files-found: ignore
+          retention-days: 7

@@ -1,0 +1,31 @@
+# Meldi – HTTPS-Reverse-Proxy vor dem Backend (das nur auf 127.0.0.1:8000 lauscht).
+#
+# MELDI_HOST = Adresse, unter der die Handys den ELW-Rechner erreichen,
+#              z.B. 192.168.8.10 (IP im ELW-WLAN) oder melder.ff-beispiel.de.
+#
+# PoC-Modus: lokale Zertifizierungsstelle („tls internal“). Das Root-Zertifikat liegt danach unter
+#   Windows: %AppData%\Caddy\pki\authorities\local\root.crt
+#   Linux:   ~/.local/share/caddy/pki/authorities/local/root.crt
+# und muss einmalig auf den Testgeräten installiert werden (siehe docs/architecture.md).
+
+{
+	# Wer per IP zugreift, sendet keinen Servernamen (SNI) – dann dieses Zertifikat nehmen.
+	default_sni {$MELDI_HOST:localhost}
+}
+
+https://{$MELDI_HOST:localhost}, https://localhost {
+	tls internal
+
+	# Produktiv-Variante ohne Zertifikatsinstallation auf Privathandys:
+	# echte Subdomain + Let's Encrypt per DNS-Challenge (kein offener Port nötig).
+	# Erfordert ein Caddy-Build mit DNS-Modul des eigenen DNS-Anbieters, z.B.:
+	#   tls {
+	#   	dns hetzner {env.HETZNER_API_TOKEN}
+	#   }
+
+	encode gzip
+	request_body {
+		max_size 12MB
+	}
+	reverse_proxy 127.0.0.1:8000
+}
